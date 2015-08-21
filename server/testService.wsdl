@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<definitions xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:tns="http://server.soap.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://server.soap.com/" name="testServiceService">
+    <types>
+        <xsd:schema version="1.0" targetNamespace="http://server.soap.com/">
+            <xsd:element name="MyObject" type="tns:MyObject"/>
+            <xsd:complexType name="MyObject">
+                <xsd:sequence>
+                    <xsd:element name="concated" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="incremented" type="xsd:int" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="MyTestObject" type="tns:MyTestObject"/>
+            <xsd:complexType name="MyTestObject">
+                <xsd:sequence>
+                    <xsd:element name="strArg" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="intArg" type="xsd:int" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="test2Response">
+        <part name="return" element="xsd:int"/>
+    </message>
+    <message name="test3">
+        <part name="strArg" element="xsd:string"/>
+        <part name="intArg" element="xsd:int"/>
+    </message>
+    <message name="test3Response">
+        <part name="return" element="tns:MyObject"/>
+    </messag
+    <portType name="testService">
+        <operation name="test3">
+            <input wsam:Action="test3" message="tns:test3"/>
+            <output wsam:Action="http://server.soap.com/testService/test3Response" message="tns:test3Response"/>
+        </operation>
+    </portType>
+    <binding name="testServicePortBinding" type="tns:testService">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc"/>
+        <operation name="test3">
+            <soap:operation soapAction="test3"/>
+            <input name="test3">
+                <soap:body use="literal"/>
+            </input>
+            <output name="test3Response">
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="testServiceService">
+        <port name="testServicePort" binding="tns:testServicePortBinding">
+            <soap:address location="http://127.0.0.1:1337/testService"/>
+        </port>
+    </service>
+</definitions>
